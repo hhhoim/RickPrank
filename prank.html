@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你被骗了！</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        #background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            object-fit: cover;
+            pointer-events: none;
+        }
+        .message {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 20px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .message h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .message p {
+            font-size: 24px;
+        }
+        .play-button {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .play-button:hover {
+            background-color: #45a049;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <video id="background-video" class="hidden" autoplay loop playsinline>
+        <source src="/videos/rickroll.mp4" type="video/mp4">
+        你的浏览器不支持视频标签。
+    </video>
+    <div class="message hidden">
+        <h1>你被骗了！</h1>
+        <p>你是第 <span id="count">0</span> 个被骗的人</p>
+    </div>
+    
+    <button id="strategy-button" class="play-button">点击查看策略</button>
+
+    <script>
+        const video = document.getElementById('background-video');
+        const message = document.querySelector('.message');
+        const strategyButton = document.getElementById('strategy-button');
+        
+        strategyButton.addEventListener('click', function() {
+            strategyButton.style.display = 'none';
+            
+            video.classList.remove('hidden');
+            message.classList.remove('hidden');
+            
+            video.muted = false;
+            video.play().catch(function(error) {
+                console.log("视频播放失败:", error);
+            });
+            
+            fetch('/visitor-count')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('count').textContent = data.count;
+                });
+        });
+    </script>
+</body>
+</html> 

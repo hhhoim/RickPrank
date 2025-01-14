@@ -1,0 +1,9 @@
+.
+├── server.js
+├── package.json
+├── .env
+└── public/
+    ├── index.html
+    ├── prank.html
+    └── videos/
+        └── rickroll.mp4 
